@@ -69,6 +69,52 @@ Write-Host "Obteniendo inventario de servidores SQL..." -ForegroundColor Cyan
 $servers = az sql server list --output json | ConvertFrom-Json
 Write-Host "Servidores encontrados: $($servers.Count)`n" -ForegroundColor Green
 
+# Menu de seleccion de servidores
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "SERVIDORES DISPONIBLES" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
+
+$serverIndex = 1
+$serverMap = @{}
+foreach ($srv in ($servers | Sort-Object name)) {
+    Write-Host ("{0,3}. {1,-40} ({2})" -f $serverIndex, $srv.name, $srv.resourceGroup) -ForegroundColor White
+    $serverMap[$serverIndex] = $srv
+    $serverIndex++
+}
+
+Write-Host "========================================`n" -ForegroundColor Cyan
+Write-Host "Opciones:" -ForegroundColor Yellow
+Write-Host "  [t] Procesar TODOS los servidores" -ForegroundColor Green
+Write-Host "  [#] Seleccionar servidor por numero`n" -ForegroundColor Green
+Write-Host "Ingrese su opcion: " -NoNewline -ForegroundColor Yellow
+$seleccion = Read-Host
+
+# Filtrar servidores segun seleccion
+$serversToProcess = @()
+$processingMode = ""
+
+if ($seleccion -eq 't' -or $seleccion -eq 'T') {
+    $serversToProcess = $servers
+    $processingMode = "TODOS"
+    Write-Host "`nProcesando TODOS los servidores...`n" -ForegroundColor Green
+}
+elseif ($seleccion -match '^\d+$') {
+    $selectedNumber = [int]$seleccion
+    if ($serverMap.ContainsKey($selectedNumber)) {
+        $serversToProcess = @($serverMap[$selectedNumber])
+        $processingMode = "SERVIDOR: $($serverMap[$selectedNumber].name)"
+        Write-Host "`nProcesando servidor: $($serverMap[$selectedNumber].name)`n" -ForegroundColor Green
+    }
+    else {
+        Write-Host "`nNumero invalido. Abortando." -ForegroundColor Red
+        exit 1
+    }
+}
+else {
+    Write-Host "`nOpcion invalida. Abortando." -ForegroundColor Red
+    exit 1
+}
+
 $stats = @{
     ResourceGroups = @{}
     TotalServers = 0
@@ -80,19 +126,19 @@ $stats = @{
     ErrorOtros = 0
 }
 
-$serversByRG = $servers | Group-Object -Property resourceGroup
+$serversByRG = $serversToProcess | Group-Object -Property resourceGroup
 
 Write-Host "Recopilando informacion previa..." -ForegroundColor Cyan
 $progressBar = 0
-foreach ($srv in $servers) {
+foreach ($srv in $serversToProcess) {
     $progressBar++
-    Write-Progress -Activity "Analizando estructura" -Status "$progressBar de $($servers.Count)" -PercentComplete (($progressBar / $servers.Count) * 100)
-    
+    Write-Progress -Activity "Analizando estructura" -Status "$progressBar de $($serversToProcess.Count)" -PercentComplete (($progressBar / $serversToProcess.Count) * 100)
+
     $stats.TotalServers++
     if (-not $stats.ResourceGroups.ContainsKey($srv.resourceGroup)) {
         $stats.ResourceGroups[$srv.resourceGroup] = $true
     }
-    
+
     $databases = az sql db list --resource-group $srv.resourceGroup --server $srv.name --output json 2>$null | ConvertFrom-Json
     $stats.TotalDatabases += $databases.Count
 }
@@ -103,7 +149,8 @@ Write-Host "Analisis completado`n" -ForegroundColor Green
 $markdown = "# INVENTARIO DE USUARIOS - AZURE SQL DATABASE`n`n"
 $markdown += "**Fecha:** $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')  `n"
 $markdown += "**Usuario:** $($context.user.name)  `n"
-$markdown += "**Suscripcion:** $($context.name)`n`n"
+$markdown += "**Suscripcion:** $($context.name)  `n"
+$markdown += "**Alcance:** $processingMode`n`n"
 
 # Placeholder para resumen
 $resumenPlaceholder = "RESUMEN_PLACEHOLDER"
@@ -325,7 +372,14 @@ Write-Host "Exportar a Markdown? (S/N): " -NoNewline -ForegroundColor Yellow
 $export = Read-Host
 
 if ($export -eq 'S' -or $export -eq 's') {
-    $mdPath = ".\inventario-usuarios-$(Get-Date -Format 'yyyyMMdd-HHmmss').md"
+    # Generar nombre de archivo segun alcance
+    if ($processingMode -eq "TODOS") {
+        $mdPath = ".\inventario-usuarios-todos-$(Get-Date -Format 'yyyyMMdd-HHmmss').md"
+    }
+    else {
+        $serverName = $serversToProcess[0].name -replace '[^a-zA-Z0-9_-]', '-'
+        $mdPath = ".\inventario-usuarios-$serverName-$(Get-Date -Format 'yyyyMMdd-HHmmss').md"
+    }
     $markdown | Out-File -FilePath $mdPath -Encoding UTF8
     Write-Host "Exportado: $mdPath" -ForegroundColor Green
 } else {
