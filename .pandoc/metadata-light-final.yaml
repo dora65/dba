@@ -1,0 +1,272 @@
+---
+lang: es-ES
+documentclass: article
+classoption:
+  - letterpaper
+  - 11pt
+
+geometry:
+  - left=0.35in
+  - right=0.35in
+  - top=0.35in
+  - bottom=0.35in
+
+mainfont: IBM Plex Serif
+mainfontoptions:
+  - Numbers=Monospaced
+  - Ligatures=TeX
+  - Scale=1.0
+sansfont: IBM Plex Sans
+sansfontoptions:
+  - Scale=MatchLowercase
+monofont: JetBrains Mono
+monofontoptions:
+  - Scale=0.92
+
+fontsize: 11pt
+linestretch: 1.25
+indent: false
+
+colorlinks: true
+linkcolor: GruvboxBlue
+urlcolor: GruvboxAqua
+citecolor: GruvboxPurple
+toccolor: GruvboxFg1
+
+toc: false
+toc-depth: 3
+number-sections: false
+
+header-includes:
+  # === Paquetes esenciales ===
+  - \usepackage{microtype}
+  - \UseMicrotypeSet[protrusion]{basicmath}
+  - \SetTracking{encoding={*}, shape=sc}{40}
+  - \SetExtraKerning[unit=space]{encoding={*}, family={bch}, series={*}, size={footnotesize,small,normalsize}}{1={-200,-200},2={-200,-200}}
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{colortbl}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \usepackage{fancyvrb}
+  - \usepackage{fvextra}
+  - \usepackage{parskip}
+  - \usepackage{tabularx}
+  - \usepackage{xltabular}
+  - \usepackage{ragged2e}
+  - \usepackage[htt]{hyphenat}
+  - \usepackage{xurl}
+  - \usepackage{makecell}
+  - \usepackage{mdframed}
+  - \usepackage{enumitem}
+  - \usepackage{amsmath}
+  - \usepackage{mathtools}
+  - \mathtoolsset{showonlyrefs=true}
+  - \usepackage{dsfont}
+  - \usepackage{amssymb}
+  - \usepackage{amsthm}
+  - \usepackage{caption}
+  - \usepackage{subcaption}
+  - \usepackage{titlesec}
+  - \usepackage[many]{tcolorbox}
+  - \usepackage{etoolbox}
+
+  # === Colores Gruvbox Light (Premium Quality) ===
+  - \definecolor{GruvboxBg}{RGB}{251,241,199}
+  - \definecolor{GruvboxFg}{RGB}{60,56,54}
+  - \definecolor{GruvboxFg1}{RGB}{40,40,40}
+  - \definecolor{GruvboxFg2}{RGB}{102,92,84}
+  - \definecolor{GruvboxFg3}{RGB}{146,131,116}
+  - \definecolor{GruvboxBg1}{RGB}{235,219,178}
+  - \definecolor{GruvboxBg2}{RGB}{213,196,161}
+  - \definecolor{GruvboxBg3}{RGB}{189,174,147}
+  - \definecolor{GruvboxRed}{RGB}{204,36,29}
+  - \definecolor{GruvboxGreen}{RGB}{152,151,26}
+  - \definecolor{GruvboxYellow}{RGB}{215,153,33}
+  - \definecolor{GruvboxBlue}{RGB}{69,133,136}
+  - \definecolor{GruvboxPurple}{RGB}{177,98,134}
+  - \definecolor{GruvboxAqua}{RGB}{104,157,106}
+  - \definecolor{GruvboxOrange}{RGB}{214,93,14}
+  - \definecolor{GruvboxGray}{RGB}{168,153,132}
+  - \definecolor{shadecolor}{RGB}{235,219,178}
+  - \definecolor{CodeBg}{RGB}{251,241,199}
+  - \definecolor{CodeFrame}{RGB}{213,196,161}
+
+  # === Configuración de página ===
+  - \pagecolor{GruvboxBg}
+  - \color{GruvboxFg1}
+
+  # === Configuración tipográfica premium ===
+  - \setlength{\parskip}{0.5em}
+  - \setlength{\parindent}{0pt}
+  - \setlength{\emergencystretch}{3em}
+  - \tolerance=3000
+  - \hyphenpenalty=5000
+  - \exhyphenpenalty=5000
+  - \widowpenalty=10000
+  - \clubpenalty=10000
+  - \brokenpenalty=4991
+  - \predisplaypenalty=10000
+  - \postdisplaypenalty=1549
+  - \displaywidowpenalty=1602
+  - \Urlmuskip=0mu plus 1mu\relax
+
+  # === Configuración de tablas OPTIMIZADA (FIX: Headers anchos, alineación, espaciado) ===
+  - \setlength{\arrayrulewidth}{0.5pt}
+  - \renewcommand{\arraystretch}{1.4}
+  - \setlength{\extrarowheight}{3pt}
+  - \setlength{\LTpre}{0.3em}
+  - \setlength{\LTpost}{0.3em}
+  - \setlength{\LTleft}{0pt}
+  - \setlength{\LTright}{0pt}
+  - \setlength{\tabcolsep}{10pt}
+  - \heavyrulewidth=0.1em
+  - \lightrulewidth=0.06em
+  - \cmidrulewidth=0.04em
+  - \arrayrulecolor{GruvboxGray}
+
+  # === Override longtable para tablas largas (FIX: Espacios entre páginas) ===
+  - |
+    \let\oldlongtable\longtable
+    \let\endoldlongtable\endlongtable
+    \renewenvironment{longtable}{%
+      \setlength{\LTpre}{0.3em}%
+      \setlength{\LTpost}{0.3em}%
+      \setlength{\LTleft}{0pt}%
+      \setlength{\LTright}{0pt}%
+      \setlength{\linewidth}{\textwidth}%
+      \small%
+      \raggedbottom%
+      \oldlongtable%
+    }{%
+      \endoldlongtable%
+    }
+
+  # === Override xltabular para tablas multi-página ===
+  - |
+    \let\oldxltabular\xltabular
+    \let\endoldxltabular\endxltabular
+    \renewenvironment{xltabular}[2]{%
+      \setlength{\LTpre}{0.3em}%
+      \setlength{\LTpost}{0.3em}%
+      \small%
+      \raggedbottom%
+      \oldxltabular{#1}{#2}%
+    }{%
+      \endoldxltabular%
+    }
+
+  # === Código syntax highlighting con overflow prevention ===
+  - |
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{fontsize=\small,breaklines=true,breakanywhere=true,commandchars=\\\{\}}
+
+  # === Alternancia de colores en filas de tablas ===
+  - \rowcolors{2}{shadecolor}{GruvboxBg}
+
+  # === Títulos con colores Gruvbox Light ===
+  - \titleformat{\section}{\Large\sffamily\bfseries\color{GruvboxBlue}}{\thesection}{0.8em}{}
+  - \titlespacing*{\section}{0pt}{1.2em}{0.6em}
+  - \titleformat{\subsection}{\large\sffamily\bfseries\color{GruvboxAqua}}{\thesubsection}{0.7em}{}
+  - \titlespacing*{\subsection}{0pt}{0.9em}{0.5em}
+  - \titleformat{\subsubsection}{\normalsize\sffamily\bfseries\color{GruvboxPurple}}{\thesubsubsection}{0.6em}{}
+  - \titlespacing*{\subsubsection}{0pt}{0.7em}{0.4em}
+
+  # === Configuración de página optimizada ===
+  - \raggedbottom
+  - \sloppy
+  - \pagestyle{empty}
+
+  # === Inline code con estilo Gruvbox Light ===
+  - |
+    \let\oldtexttt\texttt
+    \renewcommand{\texttt}[1]{%
+      \textcolor{GruvboxGreen}{\bfseries\fontsize{10.5pt}{10.5pt}\oldtexttt{#1}}%
+    }
+
+  # === Blockquotes con estilo Gruvbox Light ===
+  - |
+    \renewenvironment{quote}{%
+      \begin{mdframed}[%
+        linewidth=3pt,%
+        linecolor=GruvboxAqua,%
+        topline=false,%
+        rightline=false,%
+        bottomline=false,%
+        backgroundcolor=shadecolor,%
+        leftmargin=0pt,%
+        rightmargin=0pt,%
+        innerleftmargin=12pt,%
+        innerrightmargin=12pt,%
+        innertopmargin=8pt,%
+        innerbottommargin=8pt,%
+        skipabove=0.5em,%
+        skipbelow=0.5em,%
+        roundcorner=0pt%
+      ]%
+    }{%
+      \end{mdframed}%
+    }
+
+  # === Listas optimizadas ===
+  - |
+    \setlist[itemize]{%
+      topsep=0.3em,%
+      itemsep=0.2em,%
+      parsep=0em,%
+      leftmargin=1.2em%
+    }
+    \setlist[enumerate]{%
+      topsep=0.3em,%
+      itemsep=0.2em,%
+      parsep=0em,%
+      leftmargin=1.4em%
+    }
+
+  # === Matemáticas premium ===
+  - \allowdisplaybreaks[4]
+  - \numberwithin{equation}{section}
+  - |
+    \abovedisplayskip=0.5em
+    \abovedisplayshortskip=0.3em
+    \belowdisplayskip=0.5em
+    \belowdisplayshortskip=0.3em
+
+  # === Captions con estilo Gruvbox Light ===
+  - |
+    \DeclareCaptionFormat{gruvbox}{%
+      \textcolor{GruvboxBlue}{\textbf{#1#2}}#3%
+    }
+    \captionsetup{%
+      format=gruvbox,%
+      labelsep=period,%
+      font=small,%
+      skip=0.5em%
+    }
+
+  # === Tcolorbox con estilo Gruvbox Light ===
+  - |
+    \tcbset{%
+      gruvboxstyle/.style={%
+        colback=shadecolor,%
+        colframe=GruvboxGray,%
+        fonttitle=\sffamily\bfseries\color{GruvboxBlue},%
+        coltitle=GruvboxBlue,%
+        boxrule=0.5pt,%
+        arc=0pt,%
+        left=8pt,%
+        right=8pt,%
+        top=6pt,%
+        bottom=6pt%
+      }%
+    }
+
+  # === Fix para headers de tabla (makecell) ===
+  - |
+    \renewcommand\theadfont{\bfseries\sffamily\color{GruvboxBlue}}
+    \renewcommand\theadalign{lc}
+    \setcellgapes{4pt}
+
+---

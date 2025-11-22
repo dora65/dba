@@ -1,0 +1,292 @@
+---
+lang: es-ES
+documentclass: article
+classoption:
+  - letterpaper
+  - 11pt
+
+geometry:
+  - left=0.35in
+  - right=0.35in
+  - top=0.35in
+  - bottom=0.35in
+
+mainfont: IBM Plex Serif
+mainfontoptions:
+  - Numbers=Monospaced
+  - Ligatures=TeX
+  - Scale=1.0
+sansfont: IBM Plex Sans
+sansfontoptions:
+  - Scale=MatchLowercase
+monofont: JetBrains Mono
+monofontoptions:
+  - Scale=0.92
+
+fontsize: 11pt
+linestretch: 1.2
+indent: false
+
+colorlinks: true
+linkcolor: GruvboxBlue
+urlcolor: GruvboxAqua
+citecolor: GruvboxPurple
+toccolor: GruvboxFg1
+
+toc: false
+toc-depth: 3
+number-sections: false
+listings: true
+highlight-style: kate
+
+header-includes:
+  - \usepackage{microtype}
+  - \UseMicrotypeSet[protrusion]{basicmath}
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{colortbl}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \usepackage{fancyvrb}
+  - \usepackage{listings}
+  - \usepackage{parskip}
+  - \usepackage{tabularx}
+  - \usepackage{xltabular}
+  - \usepackage{ragged2e}
+  - \usepackage[htt]{hyphenat}
+  - \usepackage{xurl}
+  - \usepackage{makecell}
+  - \usepackage{mdframed}
+  - \usepackage{enumitem}
+  - \usepackage{amsmath}
+  - \usepackage{mathtools}
+  - \usepackage{dsfont}
+  - \usepackage{amssymb}
+  - \usepackage{caption}
+  - \usepackage{subcaption}
+  - \usepackage{titlesec}
+  - \usepackage[many]{tcolorbox}
+  - \usepackage{etoolbox}
+
+  - \definecolor{GruvboxBg}{RGB}{251,241,199}
+  - \definecolor{GruvboxBg0}{RGB}{255,249,223}
+  - \definecolor{GruvboxBg1}{RGB}{244,236,202}
+  - \definecolor{GruvboxBg2}{RGB}{237,227,186}
+  - \definecolor{GruvboxBg3}{RGB}{221,208,166}
+  - \definecolor{GruvboxBg4}{RGB}{196,184,154}
+  - \definecolor{GruvboxFg}{RGB}{40,40,40}
+  - \definecolor{GruvboxFg0}{RGB}{27,27,27}
+  - \definecolor{GruvboxFg1}{RGB}{40,40,40}
+  - \definecolor{GruvboxFg2}{RGB}{60,56,54}
+  - \definecolor{GruvboxFg3}{RGB}{80,73,69}
+  - \definecolor{GruvboxFg4}{RGB}{102,92,84}
+  - \definecolor{GruvboxRed}{RGB}{157,0,6}
+  - \definecolor{GruvboxRedBright}{RGB}{204,36,29}
+  - \definecolor{GruvboxGreen}{RGB}{121,116,14}
+  - \definecolor{GruvboxGreenBright}{RGB}{152,151,26}
+  - \definecolor{GruvboxYellow}{RGB}{181,118,20}
+  - \definecolor{GruvboxYellowBright}{RGB}{215,153,33}
+  - \definecolor{GruvboxBlue}{RGB}{7,102,120}
+  - \definecolor{GruvboxBlueBright}{RGB}{69,133,136}
+  - \definecolor{GruvboxPurple}{RGB}{143,63,113}
+  - \definecolor{GruvboxPurpleBright}{RGB}{177,98,134}
+  - \definecolor{GruvboxAqua}{RGB}{66,123,88}
+  - \definecolor{GruvboxAquaBright}{RGB}{104,157,106}
+  - \definecolor{GruvboxOrange}{RGB}{175,58,3}
+  - \definecolor{GruvboxOrangeBright}{RGB}{214,93,14}
+  - \definecolor{GruvboxGray}{RGB}{124,111,100}
+  - \definecolor{CodeBg}{RGB}{247,239,208}
+  - \definecolor{CodeFrame}{RGB}{221,208,166}
+  - \definecolor{TableRow1}{RGB}{249,243,213}
+  - \definecolor{TableRow2}{RGB}{244,236,202}
+
+  - \pagecolor{GruvboxBg}
+  - \color{GruvboxFg0}
+
+  - \setlength{\parskip}{0.5em}
+  - \setlength{\parindent}{0pt}
+  - \setlength{\emergencystretch}{3em}
+  - \tolerance=3000
+  - \hyphenpenalty=5000
+  - \exhyphenpenalty=5000
+  - \widowpenalty=10000
+  - \clubpenalty=10000
+  - \brokenpenalty=4991
+  - \predisplaypenalty=10000
+  - \postdisplaypenalty=1549
+  - \displaywidowpenalty=1602
+  - \Urlmuskip=0mu plus 1mu\relax
+
+  - \setlength{\arrayrulewidth}{0.4pt}
+  - \renewcommand{\arraystretch}{1.4}
+  - \setlength{\LTpre}{0.5em}
+  - \setlength{\LTpost}{0.5em}
+  - \setlength{\LTleft}{0pt}
+  - \setlength{\LTright}{0pt}
+  - \setlength{\tabcolsep}{10pt}
+  - \arrayrulecolor{GruvboxBg4}
+
+  - |
+    \let\oldlongtable\longtable
+    \let\endoldlongtable\endlongtable
+    \renewenvironment{longtable}{%
+      \setlength{\LTleft}{0pt}%
+      \setlength{\LTright}{0pt}%
+      \setlength{\linewidth}{\textwidth}%
+      \small%
+      \color{GruvboxFg1}%
+      \oldlongtable%
+    }{%
+      \endoldlongtable%
+    }
+
+  - |
+    \lstset{%
+      backgroundcolor=\color{CodeBg},%
+      basicstyle=\ttfamily\fontsize{9pt}{11pt}\selectfont\color{GruvboxFg0},%
+      keywordstyle=\color{GruvboxBlue}\bfseries,%
+      commentstyle=\color{GruvboxGray}\itshape,%
+      stringstyle=\color{GruvboxGreen}\bfseries,%
+      identifierstyle=\color{GruvboxFg1},%
+      numberstyle=\footnotesize\color{GruvboxFg3},%
+      frame=single,%
+      framerule=0.8pt,%
+      rulecolor=\color{CodeFrame},%
+      breaklines=true,%
+      breakatwhitespace=true,%
+      breakindent=18pt,%
+      postbreak=\mbox{\textcolor{GruvboxOrange}{$\hookrightarrow$}\space},%
+      prebreak=\space,%
+      tabsize=2,%
+      showspaces=false,%
+      showstringspaces=false,%
+      showtabs=false,%
+      numbers=left,%
+      numbersep=8pt,%
+      xleftmargin=1.8em,%
+      framexleftmargin=1.2em,%
+      aboveskip=1em,%
+      belowskip=0.8em,%
+      keepspaces=true,%
+      columns=fullflexible,%
+      linewidth=\dimexpr\linewidth-3.8em\relax,%
+      captionpos=b,%
+      escapeinside={(*@}{@*)}%
+    }
+
+  - \rowcolors{2}{TableRow1}{TableRow2}
+
+  - \titleformat{\section}{\LARGE\sffamily\bfseries\color{GruvboxBlue}}{\thesection}{1em}{}
+  - \titlespacing*{\section}{0pt}{1.5em}{0.8em}
+  - \titleformat{\subsection}{\Large\sffamily\bfseries\color{GruvboxAqua}}{\thesubsection}{0.9em}{}
+  - \titlespacing*{\subsection}{0pt}{1.2em}{0.6em}
+  - \titleformat{\subsubsection}{\large\sffamily\bfseries\color{GruvboxPurple}}{\thesubsubsection}{0.8em}{}
+  - \titlespacing*{\subsubsection}{0pt}{1em}{0.5em}
+
+  - \raggedbottom
+  - \sloppy
+  - \pagestyle{empty}
+
+  - |
+    \let\oldtexttt\texttt
+    \renewcommand{\texttt}[1]{%
+      \textcolor{GruvboxGreen}{\bfseries\fontsize{10.5pt}{10.5pt}\selectfont\oldtexttt{#1}}%
+    }
+
+  - |
+    \renewenvironment{quote}{%
+      \begin{mdframed}[%
+        linewidth=4pt,%
+        linecolor=GruvboxGray,%
+        topline=false,%
+        rightline=false,%
+        bottomline=false,%
+        backgroundcolor=GruvboxBg1,%
+        leftmargin=0pt,%
+        rightmargin=0pt,%
+        innerleftmargin=16pt,%
+        innerrightmargin=14pt,%
+        innertopmargin=10pt,%
+        innerbottommargin=10pt,%
+        skipabove=0.8em,%
+        skipbelow=0.8em,%
+        roundcorner=2pt,%
+        fontcolor=GruvboxFg0%
+      ]%
+      \color{GruvboxFg0}%
+    }{%
+      \end{mdframed}%
+    }
+
+  - |
+    \setlist[itemize]{%
+      topsep=0.4em,%
+      itemsep=0.3em,%
+      parsep=0em,%
+      leftmargin=1.4em,%
+      label=\textcolor{GruvboxBlue}{\textbullet}%
+    }
+    \setlist[itemize,2]{%
+      label=\textcolor{GruvboxAqua}{\textendash}%
+    }
+    \setlist[enumerate]{%
+      topsep=0.4em,%
+      itemsep=0.3em,%
+      parsep=0em,%
+      leftmargin=1.6em,%
+      label=\textcolor{GruvboxYellow}{\arabic*.}%
+    }
+
+  - \allowdisplaybreaks
+  - \numberwithin{equation}{section}
+  - |
+    \abovedisplayskip=0.8em
+    \abovedisplayshortskip=0.5em
+    \belowdisplayskip=0.8em
+    \belowdisplayshortskip=0.5em
+
+  - |
+    \DeclareCaptionFormat{gruvbox}{%
+      \textcolor{GruvboxBlue}{\sffamily\bfseries#1#2}%
+      \textcolor{GruvboxFg1}{\small\space#3}%
+    }
+    \captionsetup{%
+      format=gruvbox,%
+      labelsep=period,%
+      font={small,color=GruvboxFg1},%
+      skip=0.8em,%
+      justification=raggedright%
+    }
+
+  - |
+    \tcbset{%
+      gruvboxstyle/.style={%
+        enhanced,%
+        colback=GruvboxBg1,%
+        colframe=GruvboxBg4,%
+        coltext=GruvboxFg0,%
+        fonttitle=\sffamily\bfseries\color{GruvboxYellow},%
+        coltitle=GruvboxYellow,%
+        boxrule=0.8pt,%
+        arc=3pt,%
+        boxsep=5pt,%
+        left=10pt,%
+        right=10pt,%
+        top=8pt,%
+        bottom=8pt,%
+        toptitle=6pt,%
+        bottomtitle=6pt,%
+        attach boxed title to top left={yshift=-3mm,xshift=5mm},%
+        boxed title style={%
+          arc=2pt,%
+          boxrule=0.8pt,%
+          colback=GruvboxBg2,%
+          colframe=GruvboxYellowBright%
+        }%
+      }%
+    }
+
+---

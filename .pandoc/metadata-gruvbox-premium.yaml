@@ -1,0 +1,119 @@
+---
+lang: es-ES
+documentclass: article
+classoption:
+  - letterpaper
+  - 11pt
+
+geometry:
+  - left=0.4in
+  - right=0.4in
+  - top=0.45in
+  - bottom=0.45in
+
+fontsize: 10.5pt
+linestretch: 1.15
+indent: false
+
+colorlinks: true
+linkcolor: GruvboxAqua
+urlcolor: GruvboxAqua
+citecolor: GruvboxPurple
+toccolor: GruvboxFg1
+
+toc: false
+toc-depth: 3
+number-sections: false
+listings: false
+
+header-includes:
+  - \usepackage{fontspec}
+  - \setmainfont{IBM Plex Serif}
+  - \setsansfont{IBM Plex Sans}
+  - \setmonofont{JetBrains Mono}[Scale=0.88]
+  - \defaultfontfeatures{Ligatures=TeX}
+  - \usepackage{microtype}
+  - \UseMicrotypeSet[protrusion]{basicmath}
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{colortbl}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \usepackage{fancyvrb}
+  - \usepackage{fvextra}
+  - \usepackage{listings}
+  - \usepackage{parskip}
+  - \usepackage{xltabular}
+  - \usepackage{ragged2e}
+  - \usepackage[htt]{hyphenat}
+  - \usepackage{xurl}
+  - \usepackage{makecell}
+  - \usepackage{mdframed}
+  - \usepackage{enumitem}
+  - \usepackage{amsmath}
+  - \usepackage{mathtools}
+  - \usepackage{amssymb}
+  - \usepackage{caption}
+  - \usepackage{subcaption}
+  - \usepackage{titlesec}
+  - \usepackage[many]{tcolorbox}
+  - \usepackage{etoolbox}
+  - \usepackage{hyperref}
+  - \hypersetup{unicode=true,pdfborder={0 0 0},breaklinks=true,colorlinks=true,linkcolor=GruvboxAqua,urlcolor=GruvboxAqua,citecolor=GruvboxPurple}
+  - \definecolor{GruvboxBg}{RGB}{29,32,33}
+  - \definecolor{GruvboxFg}{RGB}{235,219,178}
+  - \definecolor{GruvboxFg1}{RGB}{251,241,199}
+  - \definecolor{GruvboxFg2}{RGB}{213,196,161}
+  - \definecolor{GruvboxFg3}{RGB}{189,174,147}
+  - \definecolor{GruvboxRed}{RGB}{251,73,52}
+  - \definecolor{GruvboxGreen}{RGB}{184,187,38}
+  - \definecolor{GruvboxYellow}{RGB}{250,189,47}
+  - \definecolor{GruvboxBlue}{RGB}{131,165,152}
+  - \definecolor{GruvboxPurple}{RGB}{211,134,155}
+  - \definecolor{GruvboxAqua}{RGB}{142,192,124}
+  - \definecolor{GruvboxOrange}{RGB}{254,128,25}
+  - \definecolor{GruvboxGray}{RGB}{146,131,116}
+  - \definecolor{shadecolor}{RGB}{40,40,40}
+  - \definecolor{CodeBg}{RGB}{40,40,40}
+  - \definecolor{CodeFrame}{RGB}{80,73,69}
+  - \pagecolor{GruvboxBg}
+  - \color{GruvboxFg}
+  - \setlength{\parskip}{0.45em}
+  - \setlength{\parindent}{0pt}
+  - \setlength{\emergencystretch}{3em}
+  - \tolerance=2000
+  - \hyphenpenalty=4000
+  - \exhyphenpenalty=4000
+  - \widowpenalty=10000
+  - \clubpenalty=10000
+  - \Urlmuskip=0mu plus 2mu\relax
+  - \setlength{\arrayrulewidth}{0.4pt}
+  - \renewcommand{\arraystretch}{1.4}
+  - \setlength{\LTpre}{0.35em}
+  - \setlength{\LTpost}{0.35em}
+  - \arrayrulecolor{GruvboxGray}
+  - \lstset{backgroundcolor=\color{CodeBg},basicstyle=\ttfamily\fontsize{9pt}{10.5pt}\selectfont\color{GruvboxFg1},keywordstyle=\color{GruvboxAqua}\bfseries,commentstyle=\color{GruvboxGray}\itshape,stringstyle=\color{GruvboxGreen},numberstyle=\tiny\color{GruvboxGray},frame=single,framerule=1pt,rulecolor=\color{CodeFrame},breaklines=true,breakindent=16pt,postbreak=\mbox{\textcolor{GruvboxOrange}{$\hookrightarrow$}\space},tabsize=2,showspaces=false,showstringspaces=false,numbers=left,numbersep=10pt,xleftmargin=1.5em,framexleftmargin=1em,aboveskip=0.8em,belowskip=0.6em,keepspaces=true,columns=fullflexible,captionpos=b,upquote=true}
+  - \rowcolors{2}{shadecolor}{GruvboxBg}
+  - \titleformat{\section}{\Large\sffamily\bfseries\color{GruvboxGreen}}{\thesection}{0.75em}{}
+  - \titlespacing*{\section}{0pt}{1em}{0.5em}
+  - \titleformat{\subsection}{\large\sffamily\bfseries\color{GruvboxBlue}}{\thesubsection}{0.65em}{}
+  - \titlespacing*{\subsection}{0pt}{0.8em}{0.4em}
+  - \titleformat{\subsubsection}{\normalsize\sffamily\bfseries\color{GruvboxPurple}}{\thesubsubsection}{0.55em}{}
+  - \titlespacing*{\subsubsection}{0pt}{0.6em}{0.35em}
+  - \raggedbottom
+  - \sloppy
+  - \pagestyle{empty}
+  - \let\oldtexttt\texttt
+  - \renewcommand{\texttt}[1]{\textcolor{GruvboxGreen}{\fontsize{10pt}{10pt}\selectfont\oldtexttt{#1}}}
+  - \renewenvironment{quote}{\begin{mdframed}[linewidth=2.5pt,linecolor=GruvboxBlue,topline=false,rightline=false,bottomline=false,backgroundcolor=shadecolor,leftmargin=0pt,rightmargin=0pt,innerleftmargin=10pt,innerrightmargin=10pt,innertopmargin=6pt,innerbottommargin=6pt,skipabove=0.4em,skipbelow=0.4em,roundcorner=8pt]\color{GruvboxFg}\small}{\end{mdframed}}
+  - \setlist[itemize]{topsep=0.25em,itemsep=0.15em,parsep=0em,leftmargin=1em}
+  - \setlist[enumerate]{topsep=0.25em,itemsep=0.15em,parsep=0em,leftmargin=1.2em}
+  - \abovedisplayskip=0.4em
+  - \belowdisplayskip=0.4em
+  - \DeclareCaptionFormat{gruvbox}{\textcolor{GruvboxBlue}{\textbf{#1#2}}#3}
+  - \captionsetup{format=gruvbox,labelsep=period,font=small,skip=0.4em}
+  - \tcbset{gruvboxstyle/.style={colback=shadecolor,colframe=CodeFrame,fonttitle=\sffamily\bfseries\color{GruvboxBlue},coltitle=GruvboxBlue,boxrule=1pt,arc=4pt,left=8pt,right=8pt,top=5pt,bottom=5pt}}
+---

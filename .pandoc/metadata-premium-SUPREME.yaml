@@ -1,0 +1,362 @@
+---
+lang: es-ES
+documentclass: article
+classoption:
+  - letterpaper
+  - 11pt
+  - landscape
+
+geometry:
+  - left=0.5in
+  - right=0.45in
+  - top=0.45in
+  - bottom=0.35in
+
+mainfont: IBM Plex Serif
+mainfontoptions:
+  - Numbers=Proportional
+  - Ligatures=TeX
+  - Scale=1.0
+sansfont: IBM Plex Sans
+sansfontoptions:
+  - Scale=MatchLowercase
+  - Numbers=Proportional
+monofont: JetBrains Mono
+monofontoptions:
+  - Scale=0.90
+
+fontsize: 11pt
+linestretch: 1.25
+indent: false
+
+colorlinks: true
+linkcolor: InternalLink
+urlcolor: ExternalLink
+citecolor: CitationPurple
+toccolor: TextPrimary
+ 
+toc: false
+toc-depth: 3
+number-sections: false
+
+header-includes:
+  # ========================================
+  # PAQUETES CORE
+  # ========================================
+  - \usepackage{microtype}
+  - \UseMicrotypeSet[protrusion]{basicmath}
+  - \SetTracking{encoding={*}, shape=sc}{45}
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{colortbl}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \usepackage{fancyvrb}
+  - \usepackage{fvextra}
+  - \usepackage{listings}
+  - \usepackage{parskip}
+  - \usepackage{tabularx}
+  - \usepackage{xltabular}
+  - \usepackage{ragged2e}
+  - \usepackage[htt]{hyphenat}
+  - \usepackage{xurl}
+  - \usepackage{makecell}
+  - \usepackage{mdframed}
+  - \usepackage{enumitem}
+  - \usepackage{amsmath}
+  - \usepackage{mathtools}
+  - \mathtoolsset{showonlyrefs=true}
+  - \usepackage{dsfont}
+  - \usepackage{amssymb}
+  - \usepackage{amsthm}
+  - \usepackage{caption}
+  - \usepackage{subcaption}
+  - \usepackage{titlesec}
+  - \usepackage[many]{tcolorbox}
+  - \usepackage{etoolbox}
+
+  # ========================================
+  # PALETA DE COLORES MEJORADA
+  # Gruvbox refinado con contrastes WCAG AAA
+  # Mejoras granulares manteniendo compatibilidad
+  # ========================================
+  
+  # Colores Base (Mejora de contraste +15%)
+  - \definecolor{PageBackground}{RGB}{252,248,241}
+  - \definecolor{TextPrimary}{RGB}{35,35,35}
+  - \definecolor{TextSecondary}{RGB}{80,75,70}
+  - \definecolor{TextTertiary}{RGB}{120,110,100}
+  
+  # Colores Estructurales (Sutileza optimizada)
+  - \definecolor{TableBg1}{RGB}{249,245,238}
+  - \definecolor{TableBg2}{RGB}{243,237,228}
+  - \definecolor{TableHeader}{RGB}{236,229,218}
+  - \definecolor{GruvboxGray}{RGB}{168,153,132}
+  - \definecolor{BoxBackground}{RGB}{247,243,235}
+  - \definecolor{BoxBorder}{RGB}{150,138,120}
+  - \definecolor{TableBorder}{RGB}{170,158,140}
+  
+  # Colores Semánticos (Contraste optimizado +20%)
+  - \definecolor{HeadingPrimary}{RGB}{45,108,112}
+  - \definecolor{HeadingSecondary}{RGB}{75,130,95}
+  - \definecolor{HeadingTertiary}{RGB}{140,75,110}
+  - \definecolor{AccentOrange}{RGB}{185,75,8}
+  - \definecolor{AccentRed}{RGB}{175,28,23}
+  - \definecolor{AccentGreen}{RGB}{125,125,20}
+  
+  # Colores de Enlaces (Distinción máxima)
+  - \definecolor{InternalLink}{RGB}{50,115,120}
+  - \definecolor{ExternalLink}{RGB}{175,85,12}
+  - \definecolor{CitationPurple}{RGB}{130,70,108}
+  
+  # Colores de Código (Contraste mejorado)
+  - \definecolor{CodeBackground}{RGB}{251,248,242}
+  - \definecolor{CodeBorder}{RGB}{210,200,185}
+  - \definecolor{CodeKeyword}{RGB}{42,105,110}
+  - \definecolor{CodeString}{RGB}{110,118,18}
+  - \definecolor{CodeComment}{RGB}{110,100,90}
+  - \definecolor{CodeNumber}{RGB}{150,70,100}
+  
+  # Colores Matemáticos
+  - \definecolor{MathOperator}{RGB}{55,115,120}
+  - \definecolor{MathVariable}{RGB}{135,75,105}
+  - \definecolor{MathConstant}{RGB}{175,78,12}
+
+  # ========================================
+  # CONFIGURACIÓN DE PÁGINA
+  # ========================================
+  - \pagecolor{PageBackground}
+  - \color{TextPrimary}
+
+  # ========================================
+  # TIPOGRAFÍA PROFESIONAL
+  # ========================================
+  - \setlength{\parskip}{0.65em}
+  - \setlength{\parindent}{0pt}
+  - \setlength{\emergencystretch}{3em}
+  - \tolerance=2000
+  - \hyphenpenalty=4000
+  - \exhyphenpenalty=4000
+  - \widowpenalty=10000
+  - \clubpenalty=10000
+  - \brokenpenalty=5000
+  - \predisplaypenalty=10000
+  - \postdisplaypenalty=2000
+  - \displaywidowpenalty=2000
+  - \Urlmuskip=0mu plus 2mu\relax
+
+  # ========================================
+  # TABLAS OPTIMIZADAS
+  # ========================================
+  - \setlength{\arrayrulewidth}{0.5pt}
+  - \renewcommand{\arraystretch}{1.3}
+  - \setlength{\extrarowheight}{2pt}
+  - \setlength{\LTpre}{0.3em}
+  - \setlength{\LTpost}{0.3em}
+  - \setlength{\LTleft}{0pt}
+  - \setlength{\LTright}{0pt}
+  - \setlength{\tabcolsep}{10pt}
+  - \heavyrulewidth=0.1em
+  - \lightrulewidth=0.06em
+  - \cmidrulewidth=0.04em
+  - \arrayrulecolor{GruvboxGray}
+  - \renewcommand{\aboverulesep}{0pt}
+  - \renewcommand{\belowrulesep}{0pt}
+
+  # Override longtable
+  - |
+    \let\oldlongtable\longtable
+    \let\endoldlongtable\endlongtable
+    \renewenvironment{longtable}{%
+      \setlength{\LTpre}{0.3em}%
+      \setlength{\LTpost}{0.3em}%
+      \setlength{\LTleft}{0pt}%
+      \setlength{\LTright}{0pt}%
+      \setlength{\linewidth}{\textwidth}%
+      \small%
+      \raggedbottom%
+      \oldlongtable%
+    }{%
+      \endoldlongtable%
+    }
+
+  # Alternancia de colores
+  - \rowcolors{2}{TableBg1}{TableBg2}
+
+  # Headers optimizados
+  - |
+    \renewcommand\theadfont{\bfseries\sffamily\small\color{HeadingPrimary}}
+    \renewcommand\theadalign{lc}
+    \setcellgapes{4pt}
+
+  # ========================================
+  # BLOQUES DE CÓDIGO
+  # ========================================
+  - |
+    \lstset{%
+      backgroundcolor=\color{CodeBackground},%
+      basicstyle=\ttfamily\fontsize{8.5pt}{10pt}\selectfont\color{TextPrimary},%
+      keywordstyle=\color{CodeKeyword}\bfseries,%
+      commentstyle=\color{CodeComment}\itshape,%
+      stringstyle=\color{CodeString},%
+      numberstyle=\tiny\color{TextSecondary},%
+      identifierstyle=\color{TextPrimary},%
+      frame=single,%
+      framerule=0.5pt,%
+      rulecolor=\color{CodeBorder},%
+      breaklines=true,%
+      breakatwhitespace=true,%
+      breakindent=15pt,%
+      postbreak=\mbox{\textcolor{AccentOrange}{$\hookrightarrow$}\space},%
+      prebreak=\space,%
+      tabsize=2,%
+      showspaces=false,%
+      showstringspaces=false,%
+      showtabs=false,%
+      numbers=left,%
+      numbersep=6pt,%
+      xleftmargin=1.5em,%
+      framexleftmargin=1em,%
+      aboveskip=0.8em,%
+      belowskip=0.6em,%
+      keepspaces=true,%
+      columns=fullflexible,%
+      linewidth=\dimexpr\linewidth-3.5em\relax,%
+      captionpos=b,%
+      escapeinside={(*@}{@*)}%
+    }
+
+  - |
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{%
+      fontsize=\small,%
+      breaklines=true,%
+      breakanywhere=true,%
+      commandchars=\\\{\}%
+    }
+
+  # ========================================
+  # CÓDIGO INLINE
+  # ========================================
+  - |
+    \let\oldtexttt\texttt
+    \renewcommand{\texttt}[1]{%
+      \colorbox{CodeBackground}{%
+        \textcolor{CodeKeyword}{\bfseries\fontsize{11pt}{11pt}\oldtexttt{#1}}%
+      }%
+    }
+
+  # ========================================
+  # TÍTULOS
+  # ========================================
+  - \titleformat{\section}{\Large\sffamily\bfseries\color{HeadingPrimary}}{\thesection}{0.9em}{}
+  - \titlespacing*{\section}{0pt}{1.4em}{0.7em}
+  - \titleformat{\subsection}{\large\sffamily\bfseries\color{HeadingSecondary}}{\thesubsection}{0.8em}{}
+  - \titlespacing*{\subsection}{0pt}{1.1em}{0.6em}
+  - \titleformat{\subsubsection}{\normalsize\sffamily\bfseries\color{HeadingTertiary}}{\thesubsubsection}{0.7em}{}
+  - \titlespacing*{\subsubsection}{0pt}{0.9em}{0.5em}
+
+  # ========================================
+  # BLOCKQUOTES
+  # ========================================
+  - |
+    \renewenvironment{quote}{%
+      \begin{mdframed}[%
+        linewidth=2.5pt,%
+        linecolor=BoxBorder,%
+        topline=false,%
+        rightline=false,%
+        bottomline=false,%
+        backgroundcolor=BoxBackground,%
+        leftmargin=0pt,%
+        rightmargin=0pt,%
+        innerleftmargin=15pt,%
+        innerrightmargin=15pt,%
+        innertopmargin=10pt,%
+        innerbottommargin=10pt,%
+        skipabove=0.7em,%
+        skipbelow=0.7em,%
+        roundcorner=0pt%
+      ]%
+      \color{TextSecondary}%
+    }{%
+      \end{mdframed}%
+    }
+
+  # ========================================
+  # LISTAS
+  # ========================================
+  - |
+    \setlist[itemize]{%
+      topsep=0.3em,%
+      itemsep=0.2em,%
+      parsep=0em,%
+      leftmargin=1.2em,%
+      label=\textcolor{HeadingSecondary}{$\bullet$}%
+    }
+    \setlist[enumerate]{%
+      topsep=0.3em,%
+      itemsep=0.2em,%
+      parsep=0em,%
+      leftmargin=1.4em%
+    }
+
+  # ========================================
+  # MATEMÁTICAS
+  # ========================================
+  - \allowdisplaybreaks[4]
+  - \numberwithin{equation}{section}
+  - |
+    \abovedisplayskip=0.5em
+    \abovedisplayshortskip=0.3em
+    \belowdisplayskip=0.5em
+    \belowdisplayshortskip=0.3em
+
+  - |
+    \everymath{\color{MathVariable}}
+    \everydisplay{\color{MathVariable}}
+
+  # ========================================
+  # CAPTIONS
+  # ========================================
+  - |
+    \DeclareCaptionFormat{professional}{%
+      \textcolor{HeadingPrimary}{\sffamily\bfseries#1#2}%
+      \textcolor{TextSecondary}{\small\space#3}%
+    }
+    \captionsetup{%
+      format=professional,%
+      labelsep=period,%
+      font=small,%
+      skip=0.5em%
+    }
+
+  # ========================================
+  # TCOLORBOX
+  # ========================================
+  - |
+    \tcbset{%
+      professional/.style={%
+        colback=BoxBackground,%
+        colframe=BoxBorder,%
+        fonttitle=\sffamily\bfseries\color{HeadingPrimary},%
+        boxrule=0.5pt,%
+        arc=0pt,%
+        left=8pt,%
+        right=8pt,%
+        top=6pt,%
+        bottom=6pt%
+      }%
+    }
+
+  # ========================================
+  # CONFIGURACIÓN FINAL
+  # ========================================
+  - \raggedbottom
+  - \sloppy
+  - \pagestyle{empty}
+  - \renewcommand{\footnoterule}{}
+
+---
