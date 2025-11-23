@@ -34,7 +34,7 @@ linkcolor: InternalLink
 urlcolor: ExternalLink
 citecolor: CitationPurple
 toccolor: TextPrimary
- 
+
 toc: false
 toc-depth: 3
 number-sections: false
@@ -79,52 +79,53 @@ header-includes:
   - \usepackage{etoolbox}
 
   # ========================================
-  # PALETA DE COLORES MEJORADA
-  # Gruvbox refinado con contrastes WCAG AAA
-  # Mejoras granulares manteniendo compatibilidad
+  # PALETA DE COLORES SUBLIME TEXT 3 (MONOKAI)
+  # Tema oscuro profesional con contraste optimizado
+  # Compatible con XeLaTeX y pandoc
   # ========================================
-  
-  # Colores Base (Mejora de contraste +15%)
-  - \definecolor{PageBackground}{RGB}{252,248,241}
-  - \definecolor{TextPrimary}{RGB}{35,35,35}
-  - \definecolor{TextSecondary}{RGB}{80,75,70}
-  - \definecolor{TextTertiary}{RGB}{120,110,100}
-  
-  # Colores Estructurales (Sutileza optimizada)
-  - \definecolor{TableBg1}{RGB}{249,245,238}
-  - \definecolor{TableBg2}{RGB}{243,237,228}
-  - \definecolor{TableHeader}{RGB}{236,229,218}
-  - \definecolor{GruvboxGray}{RGB}{168,153,132}
-  - \definecolor{BoxBackground}{RGB}{247,243,235}
-  - \definecolor{BoxBorder}{RGB}{150,138,120}
-  - \definecolor{TableBorder}{RGB}{170,158,140}
-  - \definecolor{Fg3}{RGB}{145,145,142}
-  
-  # Colores Semánticos (Contraste optimizado +20%)
-  - \definecolor{HeadingPrimary}{RGB}{45,108,112}
-  - \definecolor{HeadingSecondary}{RGB}{75,130,95}
-  - \definecolor{HeadingTertiary}{RGB}{140,75,110}
-  - \definecolor{AccentOrange}{RGB}{185,75,8}
-  - \definecolor{AccentRed}{RGB}{175,28,23}
-  - \definecolor{AccentGreen}{RGB}{125,125,20}
-  
+
+  # Colores Base (Sublime Text 3 Monokai)
+  - \definecolor{PageBackground}{RGB}{39,40,34}
+  - \definecolor{TextPrimary}{RGB}{248,248,242}
+  - \definecolor{TextSecondary}{RGB}{117,113,94}
+  - \definecolor{TextTertiary}{RGB}{144,144,138}
+
+  # Colores Estructurales (Sutileza optimizada para dark)
+  - \definecolor{TableBg1}{RGB}{45,46,40}
+  - \definecolor{TableBg2}{RGB}{39,40,34}
+  - \definecolor{TableHeader}{RGB}{52,53,46}
+  - \definecolor{GruvboxGray}{RGB}{117,113,94}
+  - \definecolor{BoxBackground}{RGB}{49,50,44}
+  - \definecolor{BoxBorder}{RGB}{102,217,239}
+  - \definecolor{TableBorder}{RGB}{73,72,62}
+  - \definecolor{Fg3}{RGB}{73,72,62}
+
+  # Colores Semánticos (Monokai - Contraste optimizado)
+  - \definecolor{HeadingPrimary}{RGB}{102,217,239}
+  - \definecolor{HeadingSecondary}{RGB}{166,226,46}
+  - \definecolor{HeadingTertiary}{RGB}{249,38,114}
+  - \definecolor{AccentOrange}{RGB}{253,151,31}
+  - \definecolor{AccentRed}{RGB}{249,38,114}
+  - \definecolor{AccentGreen}{RGB}{166,226,46}
+
   # Colores de Enlaces (Distinción máxima)
-  - \definecolor{InternalLink}{RGB}{50,115,120}
-  - \definecolor{ExternalLink}{RGB}{175,85,12}
-  - \definecolor{CitationPurple}{RGB}{130,70,108}
-  
-  # Colores de Código (Contraste mejorado)
-  - \definecolor{CodeBackground}{RGB}{243,237,228}
-  - \definecolor{CodeBorder}{RGB}{236,229,218}
-  - \definecolor{CodeKeyword}{RGB}{42,105,110}
-  - \definecolor{CodeString}{RGB}{110,118,18}
-  - \definecolor{CodeComment}{RGB}{110,100,90}
-  - \definecolor{CodeNumber}{RGB}{150,70,100}
-  
+  - \definecolor{InternalLink}{RGB}{102,217,239}
+  - \definecolor{ExternalLink}{RGB}{253,151,31}
+  - \definecolor{CitationPurple}{RGB}{174,129,255}
+
+  # Colores de Código (Monokai scheme)
+  - \definecolor{CodeBackground}{RGB}{39,40,34}
+  - \definecolor{CodeBorder}{RGB}{73,72,62}
+  - \definecolor{CodeKeyword}{RGB}{249,38,114}
+  - \definecolor{CodeString}{RGB}{230,219,116}
+  - \definecolor{CodeComment}{RGB}{117,113,94}
+  - \definecolor{CodeNumber}{RGB}{174,129,255}
+  - \definecolor{CodeFunction}{RGB}{166,226,46}
+
   # Colores Matemáticos
-  - \definecolor{MathOperator}{RGB}{55,115,120}
-  - \definecolor{MathVariable}{RGB}{135,75,105}
-  - \definecolor{MathConstant}{RGB}{175,78,12}
+  - \definecolor{MathOperator}{RGB}{249,38,114}
+  - \definecolor{MathVariable}{RGB}{174,129,255}
+  - \definecolor{MathConstant}{RGB}{253,151,31}
 
   # ========================================
   # CONFIGURACIÓN DE PÁGINA
@@ -235,7 +236,7 @@ header-includes:
       captionpos=b,%
       escapeinside={(*@}{@*)}%
     }
-    
+
 
   - |
     \DefineVerbatimEnvironment{Highlighting}{Verbatim}{%
@@ -252,7 +253,7 @@ header-includes:
     \let\oldtexttt\texttt
     \renewcommand{\texttt}[1]{%
       \colorbox{CodeBackground}{%
-        \textcolor{CodeKeyword}{\bfseries\fontsize{11pt}{11pt}\oldtexttt{#1}}%
+        \textcolor{HeadingPrimary}{\bfseries\fontsize{11pt}{11pt}\oldtexttt{#1}}%
       }%
     }
 

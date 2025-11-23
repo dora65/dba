@@ -2,9 +2,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Export PDF - Premium SUPREME (Gruvbox Light)",
+      "label": "Export PDF - Premium LIGHT Theme",
       "type": "shell",
-      "command": "$start = Get-Date; pandoc '${file}' -o '${fileDirname}\\${fileBasenameNoExtension}-SUPREME.pdf' --from=markdown+gfm_auto_identifiers+pipe_tables+grid_tables+multiline_tables+simple_tables+raw_html+raw_tex+strikeout+superscript+subscript+fenced_divs+bracketed_spans+definition_lists+latex_macros+tex_math_dollars+implicit_figures+footnotes+inline_notes+citations+fenced_code_attributes+backtick_code_blocks+line_blocks+fancy_lists+startnum+task_lists+escaped_line_breaks+smart+yaml_metadata_block --pdf-engine=xelatex --lua-filter=.pandoc\\linebreak-filter.lua --metadata-file=.pandoc\\metadata-premium-SUPREME.yaml --standalone --dpi=300 --wrap=auto --toc-depth=3 --top-level-division=section --pdf-engine-opt=-no-shell-escape --highlight-style=.pandoc\\intellij-idea.theme --listings --pdf-engine-opt=-interaction=nonstopmode --pdf-engine-opt=-file-line-error --pdf-engine-opt=-synctex=1 '--pdf-engine-opt=-output-driver=xdvipdfmx -z 9' 2>&1 | Out-Null; $end = Get-Date; $duration = ($end - $start).TotalSeconds; if ($LASTEXITCODE -eq 0) { Write-Host \"✓ PDF SUPREME generado en $duration segundos!\" -ForegroundColor Magenta; code-insiders '${fileDirname}\\${fileBasenameNoExtension}-SUPREME.pdf' } else { Write-Host '✗ Error al generar PDF SUPREME' -ForegroundColor Red }",
+      "command": "$start = Get-Date; pandoc '${file}' -o '${fileDirname}\\${fileBasenameNoExtension}-LIGHT.pdf' --from=markdown+gfm_auto_identifiers+pipe_tables+grid_tables+multiline_tables+simple_tables+raw_html+raw_tex+strikeout+superscript+subscript+fenced_divs+bracketed_spans+definition_lists+latex_macros+tex_math_dollars+implicit_figures+footnotes+inline_notes+citations+fenced_code_attributes+backtick_code_blocks+line_blocks+fancy_lists+startnum+task_lists+escaped_line_breaks+smart+yaml_metadata_block --pdf-engine=xelatex --lua-filter=.pandoc\\linebreak-filter.lua --metadata-file=.pandoc\\metadata-premium-SUPREME.yaml --standalone --dpi=300 --wrap=auto --toc-depth=3 --top-level-division=section --pdf-engine-opt=-no-shell-escape --highlight-style=.pandoc\\intellij-idea.theme --listings --pdf-engine-opt=-interaction=nonstopmode --pdf-engine-opt=-file-line-error --pdf-engine-opt=-synctex=1 '--pdf-engine-opt=-output-driver=xdvipdfmx -z 9' 2>&1 | Out-Null; $end = Get-Date; $duration = ($end - $start).TotalSeconds; if ($LASTEXITCODE -eq 0) { Write-Host \"✓ PDF LIGHT generado en $duration segundos!\" -ForegroundColor Magenta; code-insiders '${fileDirname}\\${fileBasenameNoExtension}-LIGHT.pdf' } else { Write-Host '✗ Error al generar PDF LIGHT' -ForegroundColor Red }",
       "options": {
         "shell": {
           "executable": "pwsh.exe",
@@ -24,6 +24,52 @@
       "runOptions": {
         "instanceLimit": 1
       }
-    }    
+    },
+    {
+      "label": "Export PDF - Premium DARK Theme (Sublime Text 3)",
+      "type": "shell",
+      "command": "$start = Get-Date; pandoc '${file}' -o '${fileDirname}\\${fileBasenameNoExtension}-DARK.pdf' --from=markdown+gfm_auto_identifiers+pipe_tables+grid_tables+multiline_tables+simple_tables+raw_html+raw_tex+strikeout+superscript+subscript+fenced_divs+bracketed_spans+definition_lists+latex_macros+tex_math_dollars+implicit_figures+footnotes+inline_notes+citations+fenced_code_attributes+backtick_code_blocks+line_blocks+fancy_lists+startnum+task_lists+escaped_line_breaks+smart+yaml_metadata_block --pdf-engine=xelatex --lua-filter=.pandoc\\linebreak-filter.lua --metadata-file=.pandoc\\metadata-gruvbox-dark.yaml --standalone --dpi=300 --wrap=auto --toc-depth=3 --top-level-division=section --pdf-engine-opt=-no-shell-escape --highlight-style=.pandoc\\gruvbox-dark-custom.theme --listings --pdf-engine-opt=-interaction=nonstopmode --pdf-engine-opt=-file-line-error --pdf-engine-opt=-synctex=1 '--pdf-engine-opt=-output-driver=xdvipdfmx -z 9' 2>&1 | Out-Null; $end = Get-Date; $duration = ($end - $start).TotalSeconds; if ($LASTEXITCODE -eq 0) { Write-Host \"✓ PDF DARK generado en $duration segundos!\" -ForegroundColor Magenta; code-insiders '${fileDirname}\\${fileBasenameNoExtension}-DARK.pdf' } else { Write-Host '✗ Error al generar PDF DARK' -ForegroundColor Red }",
+      "options": {
+        "shell": {
+          "executable": "pwsh.exe",
+          "args": ["-NoProfile", "-Command"]
+        }
+      },
+      "group": {
+        "kind": "build"
+      },
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated",
+        "close": true
+      },
+      "problemMatcher": [],
+      "runOptions": {
+        "instanceLimit": 1
+      }
+    },
+    {
+      "label": "Export PDF - Both Themes (LIGHT + DARK)",
+      "type": "shell",
+      "command": "$start = Get-Date; Write-Host 'Generando PDF LIGHT...' -ForegroundColor Cyan; pandoc '${file}' -o '${fileDirname}\\${fileBasenameNoExtension}-LIGHT.pdf' --from=markdown+gfm_auto_identifiers+pipe_tables+grid_tables+multiline_tables+simple_tables+raw_html+raw_tex+strikeout+superscript+subscript+fenced_divs+bracketed_spans+definition_lists+latex_macros+tex_math_dollars+implicit_figures+footnotes+inline_notes+citations+fenced_code_attributes+backtick_code_blocks+line_blocks+fancy_lists+startnum+task_lists+escaped_line_breaks+smart+yaml_metadata_block --pdf-engine=xelatex --lua-filter=.pandoc\\linebreak-filter.lua --metadata-file=.pandoc\\metadata-premium-SUPREME.yaml --standalone --dpi=300 --wrap=auto --toc-depth=3 --top-level-division=section --pdf-engine-opt=-no-shell-escape --highlight-style=.pandoc\\intellij-idea.theme --listings --pdf-engine-opt=-interaction=nonstopmode --pdf-engine-opt=-file-line-error --pdf-engine-opt=-synctex=1 '--pdf-engine-opt=-output-driver=xdvipdfmx -z 9' 2>&1 | Out-Null; Write-Host 'Generando PDF DARK...' -ForegroundColor Cyan; pandoc '${file}' -o '${fileDirname}\\${fileBasenameNoExtension}-DARK.pdf' --from=markdown+gfm_auto_identifiers+pipe_tables+grid_tables+multiline_tables+simple_tables+raw_html+raw_tex+strikeout+superscript+subscript+fenced_divs+bracketed_spans+definition_lists+latex_macros+tex_math_dollars+implicit_figures+footnotes+inline_notes+citations+fenced_code_attributes+backtick_code_blocks+line_blocks+fancy_lists+startnum+task_lists+escaped_line_breaks+smart+yaml_metadata_block --pdf-engine=xelatex --lua-filter=.pandoc\\linebreak-filter.lua --metadata-file=.pandoc\\metadata-gruvbox-dark.yaml --standalone --dpi=300 --wrap=auto --toc-depth=3 --top-level-division=section --pdf-engine-opt=-no-shell-escape --highlight-style=.pandoc\\gruvbox-dark-custom.theme --listings --pdf-engine-opt=-interaction=nonstopmode --pdf-engine-opt=-file-line-error --pdf-engine-opt=-synctex=1 '--pdf-engine-opt=-output-driver=xdvipdfmx -z 9' 2>&1 | Out-Null; $end = Get-Date; $duration = ($end - $start).TotalSeconds; if ($LASTEXITCODE -eq 0) { Write-Host \"✓ Ambos PDFs generados en $duration segundos!\" -ForegroundColor Magenta; code-insiders '${fileDirname}\\${fileBasenameNoExtension}-LIGHT.pdf' } else { Write-Host '✗ Error al generar PDFs' -ForegroundColor Red }",
+      "options": {
+        "shell": {
+          "executable": "pwsh.exe",
+          "args": ["-NoProfile", "-Command"]
+        }
+      },
+      "group": {
+        "kind": "build"
+      },
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated",
+        "close": true
+      },
+      "problemMatcher": [],
+      "runOptions": {
+        "instanceLimit": 1
+      }
+    }
   ]
 }

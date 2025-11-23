@@ -2,58 +2,110 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $query = @"
-WITH UserRoles AS (
-    SELECT 
+WITH PermisosDirectos AS (
+    SELECT
+        dp.principal_id,
+        STUFF((
+            SELECT ', ' +
+                dpm.permission_name +
+                CASE dpm.state_desc
+                    WHEN 'DENY' THEN ' (DENY)'
+                    WHEN 'GRANT_WITH_GRANT_OPTION' THEN ' (WGO)'
+                    ELSE ''
+                END +
+                CASE
+                    WHEN dpm.class_desc = 'OBJECT_OR_COLUMN' THEN ' ON ' + ISNULL(OBJECT_SCHEMA_NAME(dpm.major_id) + '.' + OBJECT_NAME(dpm.major_id), 'obj')
+                    WHEN dpm.class_desc = 'SCHEMA' THEN ' ON SCHEMA::' + ISNULL(SCHEMA_NAME(dpm.major_id), 'sch')
+                    WHEN dpm.class_desc = 'DATABASE' THEN ' ON DATABASE'
+                    ELSE ''
+                END
+            FROM sys.database_permissions dpm
+            WHERE dpm.grantee_principal_id = dp.principal_id
+            ORDER BY dpm.permission_name
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS permisos_directos,
+        MAX(CASE
+            WHEN dpm.permission_name IN ('CONTROL','ALTER ANY USER','ALTER ANY ROLE','IMPERSONATE','TAKE OWNERSHIP','CREATE DATABASE','DROP DATABASE','ALTER ANY DATABASE','ALTER ANY SCHEMA') THEN 1
+            ELSE 0
+        END) AS tiene_permisos_criticos_directos
+    FROM sys.database_principals dp
+    LEFT JOIN sys.database_permissions dpm ON dp.principal_id = dpm.grantee_principal_id
+    GROUP BY dp.principal_id
+),
+RolesUsuario AS (
+    SELECT
         drm.member_principal_id,
-        STRING_AGG(r.name, ', ') WITHIN GROUP (ORDER BY r.name) AS roles,
-        MAX(CASE WHEN r.name IN ('db_owner','db_securityadmin','db_accessadmin') THEN 1 ELSE 0 END) AS tiene_roles_admin
+        STUFF((
+            SELECT ', ' + r.name
+            FROM sys.database_role_members drm2
+            JOIN sys.database_principals r ON drm2.role_principal_id = r.principal_id
+            WHERE drm2.member_principal_id = drm.member_principal_id
+            ORDER BY
+                CASE r.name
+                    WHEN 'db_owner' THEN 1
+                    WHEN 'db_securityadmin' THEN 2
+                    WHEN 'db_accessadmin' THEN 3
+                    WHEN 'db_ddladmin' THEN 4
+                    WHEN 'loginmanager' THEN 5
+                    WHEN 'dbmanager' THEN 6
+                    WHEN 'db_backupoperator' THEN 7
+                    WHEN 'db_datawriter' THEN 8
+                    WHEN 'db_datareader' THEN 9
+                    ELSE 10
+                END,
+                r.name
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS roles,
+        MAX(CASE
+            WHEN r.name IN ('db_owner','db_securityadmin','db_accessadmin','db_ddladmin','loginmanager','dbmanager') THEN 1
+            ELSE 0
+        END) AS tiene_roles_criticos
     FROM sys.database_role_members drm
     JOIN sys.database_principals r ON drm.role_principal_id = r.principal_id
     GROUP BY drm.member_principal_id
 )
-SELECT  
-    ROW_NUMBER() OVER (ORDER BY 
-        CASE 
-            WHEN dp.authentication_type = 1 AND (sp.sid IS NULL OR sp.is_disabled = 1) THEN 0
-            WHEN ur.tiene_roles_admin = 1 THEN 1
-            WHEN dp.type = 'S' THEN 2
-            ELSE 3
-        END, dp.name
-    ) AS Num,
+SELECT
+    ROW_NUMBER() OVER (ORDER BY
+        CASE
+            WHEN ru.tiene_roles_criticos = 1 OR pd.tiene_permisos_criticos_directos = 1 THEN 1
+            WHEN ru.roles LIKE '%db_datawriter%' OR ru.roles LIKE '%db_datareader%' THEN 2
+            WHEN dp.type = 'S' THEN 3
+            ELSE 4
+        END,
+        dp.name
+    ) AS [#],
     dp.name AS Usuario,
-    ISNULL(ur.roles, 'Sin roles') AS RolesDB,
-    dp.type_desc + ' [' + CASE dp.authentication_type
-        WHEN 1 THEN 'INSTANCE'
-        WHEN 2 THEN 'DATABASE'
+    dp.type_desc + ' [' +
+    CASE dp.authentication_type
+        WHEN 1 THEN 'SQL-LOGIN'
+        WHEN 2 THEN 'SQL-CONTAINED'
         WHEN 3 THEN 'WINDOWS'
-        WHEN 4 THEN 'AZURE AD'
+        WHEN 4 THEN 'AZURE-AD'
         ELSE 'N/A'
     END + ']' AS TipoUsuario,
-    FORMAT(dp.modify_date, 'yyyy-MM-dd') + ' (' + 
-    CAST(DATEDIFF(DAY, dp.modify_date, SYSDATETIME()) / 365 AS VARCHAR) + ' anos ' +
-    CAST((DATEDIFF(DAY, dp.modify_date, SYSDATETIME()) % 365) / 30 AS VARCHAR) + ' meses y ' +
-    CAST(DATEDIFF(DAY, dp.modify_date, SYSDATETIME()) % 30 AS VARCHAR) + ' dias)' AS Antiguedad,
+    ISNULL(ru.roles, 'Sin roles') AS Roles,
+    ISNULL(pd.permisos_directos, 'Sin permisos directos') AS PermisosDirectos,
+    FORMAT(dp.create_date, 'yyyy-MM-dd') + ' (' +
+    CAST(DATEDIFF(DAY, dp.create_date, GETDATE()) / 365 AS VARCHAR) + ' años ' +
+    CAST((DATEDIFF(DAY, dp.create_date, GETDATE()) % 365) / 30 AS VARCHAR) + ' meses ' +
+    CAST(DATEDIFF(DAY, dp.create_date, GETDATE()) % 30 AS VARCHAR) + ' días)' AS Antiguedad,
     CASE
-        WHEN sp.sid IS NULL AND dp.sid IS NOT NULL AND dp.sid <> 0x00 AND dp.authentication_type = 1 THEN 'Huerfano'
-        WHEN sp.is_disabled = 1 THEN 'Deshabilitado'
-        WHEN sp.sid IS NOT NULL THEN 'Activo'
-        WHEN dp.authentication_type = 2 THEN 'Contenido'
-        ELSE 'Sin login'
-    END AS Estado,
-    CASE
-        WHEN dp.authentication_type = 1 AND (sp.sid IS NULL OR sp.is_disabled = 1) THEN 'ALTO - Usuario huerfano sin login asociado'
-        WHEN ur.tiene_roles_admin = 1 THEN 'ALTO - Posee roles administrativos (db_owner, db_securityadmin o db_accessadmin)'
-        WHEN dp.type = 'S' THEN 'MEDIO - Utiliza autenticacion SQL'
-        ELSE 'BAJO - Usuario sin privilegios elevados'
+        WHEN ru.tiene_roles_criticos = 1 THEN 'ALTO - Roles admin'
+        WHEN pd.tiene_permisos_criticos_directos = 1 THEN 'ALTO - Permisos críticos'
+        WHEN ru.roles LIKE '%db_datawriter%' OR ru.roles LIKE '%db_datareader%' THEN 'MEDIO - Lectura/escritura'
+        WHEN dp.authentication_type = 2 THEN 'MEDIO - SQL contenido'
+        WHEN dp.authentication_type = 1 THEN 'MEDIO - SQL login'
+        ELSE 'BAJO'
     END AS NivelRiesgo
 FROM sys.database_principals dp
-LEFT JOIN sys.server_principals sp ON dp.sid = sp.sid
-LEFT JOIN UserRoles ur ON dp.principal_id = ur.member_principal_id
+LEFT JOIN PermisosDirectos pd ON dp.principal_id = pd.principal_id
+LEFT JOIN RolesUsuario ru ON dp.principal_id = ru.member_principal_id
 WHERE dp.type IN ('S','U','G','E','X','C','K')
+  AND dp.name NOT LIKE '##MS_%'
   AND dp.name NOT IN ('dbo','guest','INFORMATION_SCHEMA','sys','public')
   AND dp.is_fixed_role = 0
   AND dp.principal_id > 4
-ORDER BY Num;
+ORDER BY [#];
 "@
 
 # Verificar autenticacion
@@ -152,6 +204,15 @@ $markdown += "**Usuario:** $($context.user.name)  `n"
 $markdown += "**Suscripcion:** $($context.name)  `n"
 $markdown += "**Alcance:** $processingMode`n`n"
 
+# Nota de acronimos (una sola vez al inicio)
+$markdown += "## NOTA DE ACRONIMOS Y CONVENCIONES`n`n"
+$markdown += "> **WGO**: WITH GRANT OPTION - Permiso otorgado con capacidad de delegar  `n"
+$markdown += "> **DENY**: Permiso explicitamente denegado (tiene precedencia sobre GRANT)  `n"
+$markdown += "> **SQL-LOGIN**: Usuario autenticado mediante login de SQL Server a nivel instancia  `n"
+$markdown += "> **SQL-CONTAINED**: Usuario de base de datos contenida con autenticacion SQL  `n"
+$markdown += "> **WINDOWS**: Usuario autenticado mediante Windows/Active Directory  `n"
+$markdown += "> **AZURE-AD**: Usuario autenticado mediante Azure Active Directory`n`n"
+
 # Placeholder para resumen
 $resumenPlaceholder = "RESUMEN_PLACEHOLDER"
 $markdown += $resumenPlaceholder
@@ -218,38 +279,45 @@ foreach ($rg in ($serversByRG | Sort-Object Name)) {
             continue
         }
         
+        # Ordenar bases de datos: master primero, luego las demas alfabeticamente
+        $sortedDatabases = $databases | Sort-Object -Property @{Expression = {if ($_.name -eq 'master') {0} else {1}}}, name
+
         $dbNum = 0
-        foreach ($db in ($databases | Sort-Object name)) {
+        foreach ($db in $sortedDatabases) {
             $dbNum++
             $processedItems++
             $percentComplete = [math]::Round(($processedItems / $totalItems) * 100, 1)
-            
+
             Write-Progress -Activity "Procesando bases de datos" -Status "$processedItems de $totalItems ($percentComplete%)" -PercentComplete $percentComplete
             Write-Host "    $rgNum.$serverNum.$dbNum. $($db.name)" -NoNewline -ForegroundColor DarkGray
-            
+
             $markdown += "#### $rgNum.$serverNum.$dbNum. Base de Datos: ``$($db.name)``"
-            
+
             if ($db.name -eq 'master') {
                 $markdown += " _(Nivel Servidor)_"
             }
-            
+
             $markdown += "`n`n"
-            
+
             try {
                 $errorFile = [System.IO.Path]::GetTempFileName()
                 $result = sqlcmd -S $srv.fullyQualifiedDomainName -d $db.name -G -C -Q $query -h -1 -s "|" -W 2>$errorFile
-                
+
                 if ($LASTEXITCODE -eq 0 -and $result) {
                     $statsExitosas++
                     Write-Host " - OK" -ForegroundColor Green
-                    
-                    $markdown += "| **#** | **Usuario** | **Roles DB** | **Tipo Usuario** | **Antiguedad** | **Estado Login** | **Nivel Riesgo** |`n"
-                    $markdown += "|------:|:------------|:-------------|:-----------------|:---------------|:-----------------|:------------------|`n"
-                    
+
+                    $markdown += "| **#** | **Usuario** | **Tipo Usuario** | **Roles** | **Permisos Directos** | **Antigüedad** | **Nivel Riesgo** |`n"
+                    $markdown += "|------:|:------------|:-----------------|:----------|:----------------------|:---------------|:-----------------|`n"
+
                     $result | Where-Object { $_ -match '\|' } | ForEach-Object {
                         $fields = $_ -split '\|' | ForEach-Object { $_.Trim() }
                         if ($fields.Count -ge 7) {
-                            $markdown += "| $($fields[0]) | $($fields[1]) | $($fields[2]) | $($fields[3]) | $($fields[4]) | $($fields[5]) | $($fields[6]) |`n"
+                            # Convertir separadores de coma en <br> para roles y permisos directos
+                            $roles = $fields[3] -replace ', ', '<br>'
+                            $permisosDirectos = $fields[4] -replace ', ', '<br>'
+
+                            $markdown += "| $($fields[0]) | $($fields[1]) | $($fields[2]) | $roles | $permisosDirectos | $($fields[5]) | $($fields[6]) |`n"
                         }
                     }
                     $markdown += "`n"
@@ -368,20 +436,116 @@ if ($statsErrores -gt 0) {
 }
 Write-Host "========================================`n" -ForegroundColor Cyan
 
-Write-Host "Exportar a Markdown? (S/N): " -NoNewline -ForegroundColor Yellow
-$export = Read-Host
+# Generar nombre base de archivo segun alcance
+if ($processingMode -eq "TODOS") {
+    $baseFileName = "inventario-usuarios-todos-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+}
+else {
+    $serverName = $serversToProcess[0].name -replace '[^a-zA-Z0-9_-]', '-'
+    $baseFileName = "inventario-usuarios-$serverName-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+}
 
-if ($export -eq 'S' -or $export -eq 's') {
-    # Generar nombre de archivo segun alcance
-    if ($processingMode -eq "TODOS") {
-        $mdPath = ".\inventario-usuarios-todos-$(Get-Date -Format 'yyyyMMdd-HHmmss').md"
+# Menu de exportacion
+Write-Host "`n========================================" -ForegroundColor Cyan
+Write-Host "OPCIONES DE EXPORTACION" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "  [1] Exportar solo Markdown" -ForegroundColor Green
+Write-Host "  [2] Exportar Markdown + PDF (Tema Light)" -ForegroundColor Green
+Write-Host "  [3] Exportar Markdown + PDF (Tema Dark)" -ForegroundColor Green
+Write-Host "  [4] Exportar Markdown + Ambos PDFs (Light y Dark)" -ForegroundColor Green
+Write-Host "  [N] No exportar" -ForegroundColor Yellow
+Write-Host "========================================`n" -ForegroundColor Cyan
+Write-Host "Seleccione opcion: " -NoNewline -ForegroundColor Yellow
+$exportOption = Read-Host
+
+$mdPath = ".\$baseFileName.md"
+$exportedFiles = @()
+
+switch ($exportOption) {
+    {$_ -in '1','2','3','4'} {
+        # Exportar markdown
+        $markdown | Out-File -FilePath $mdPath -Encoding UTF8
+        Write-Host "`n✓ Markdown exportado: $mdPath" -ForegroundColor Green
+        $exportedFiles += $mdPath
+
+        # Funciones de exportacion PDF
+        function Export-PDF {
+            param(
+                [string]$MarkdownPath,
+                [string]$Theme,
+                [string]$MetadataFile,
+                [string]$HighlightTheme,
+                [string]$Suffix
+            )
+
+            $pdfPath = $MarkdownPath -replace '\.md$', "-$Suffix.pdf"
+            $startTime = Get-Date
+
+            Write-Host "`nGenerando PDF ($Theme)..." -ForegroundColor Cyan
+
+            $pandocArgs = @(
+                $MarkdownPath,
+                '-o', $pdfPath,
+                '--from=markdown+gfm_auto_identifiers+pipe_tables+grid_tables+multiline_tables+simple_tables+raw_html+raw_tex+strikeout+superscript+subscript+fenced_divs+bracketed_spans+definition_lists+latex_macros+tex_math_dollars+implicit_figures+footnotes+inline_notes+citations+fenced_code_attributes+backtick_code_blocks+line_blocks+fancy_lists+startnum+task_lists+escaped_line_breaks+smart+yaml_metadata_block',
+                '--pdf-engine=xelatex',
+                "--lua-filter=.pandoc\linebreak-filter.lua",
+                "--metadata-file=.pandoc\$MetadataFile",
+                '--standalone',
+                '--dpi=300',
+                '--wrap=auto',
+                '--toc-depth=3',
+                '--top-level-division=section',
+                '--pdf-engine-opt=-no-shell-escape',
+                "--highlight-style=.pandoc\$HighlightTheme",
+                '--listings',
+                '--pdf-engine-opt=-interaction=nonstopmode',
+                '--pdf-engine-opt=-file-line-error',
+                '--pdf-engine-opt=-synctex=1',
+                '--pdf-engine-opt=-output-driver=xdvipdfmx -z 9'
+            )
+
+            $pandocOutput = & pandoc $pandocArgs 2>&1
+
+            $endTime = Get-Date
+            $duration = ($endTime - $startTime).TotalSeconds
+
+            if ($LASTEXITCODE -eq 0 -and (Test-Path $pdfPath)) {
+                Write-Host "✓ PDF $Theme generado en $([math]::Round($duration, 2)) segundos!" -ForegroundColor Magenta
+                Write-Host "  Archivo: $pdfPath" -ForegroundColor White
+                return $pdfPath
+            }
+            else {
+                Write-Host "✗ Error al generar PDF $Theme" -ForegroundColor Red
+                if ($pandocOutput) {
+                    Write-Host "Detalles del error:" -ForegroundColor Yellow
+                    $pandocOutput | ForEach-Object { Write-Host "  $_" -ForegroundColor DarkGray }
+                }
+                return $null
+            }
+        }
+
+        # Exportar PDFs segun opcion
+        if ($exportOption -eq '2' -or $exportOption -eq '4') {
+            $pdfLight = Export-PDF -MarkdownPath $mdPath -Theme "LIGHT" -MetadataFile "metadata-premium-SUPREME.yaml" -HighlightTheme "intellij-idea.theme" -Suffix "LIGHT"
+            if ($pdfLight) { $exportedFiles += $pdfLight }
+        }
+
+        if ($exportOption -eq '3' -or $exportOption -eq '4') {
+            $pdfDark = Export-PDF -MarkdownPath $mdPath -Theme "DARK" -MetadataFile "metadata-gruvbox-dark.yaml" -HighlightTheme "gruvbox-dark-custom.theme" -Suffix "DARK"
+            if ($pdfDark) { $exportedFiles += $pdfDark }
+        }
+
+        # Resumen final
+        Write-Host "`n========================================" -ForegroundColor Cyan
+        Write-Host "ARCHIVOS EXPORTADOS" -ForegroundColor Cyan
+        Write-Host "========================================" -ForegroundColor Cyan
+        foreach ($file in $exportedFiles) {
+            $fileSize = [math]::Round((Get-Item $file).Length / 1KB, 2)
+            Write-Host "  $file ($fileSize KB)" -ForegroundColor Green
+        }
+        Write-Host "========================================`n" -ForegroundColor Cyan
     }
-    else {
-        $serverName = $serversToProcess[0].name -replace '[^a-zA-Z0-9_-]', '-'
-        $mdPath = ".\inventario-usuarios-$serverName-$(Get-Date -Format 'yyyyMMdd-HHmmss').md"
+    default {
+        Write-Host "`nExportacion cancelada" -ForegroundColor Yellow
     }
-    $markdown | Out-File -FilePath $mdPath -Encoding UTF8
-    Write-Host "Exportado: $mdPath" -ForegroundColor Green
-} else {
-    Write-Host "Exportacion cancelada" -ForegroundColor Yellow
 }
