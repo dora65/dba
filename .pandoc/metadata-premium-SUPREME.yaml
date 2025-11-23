@@ -4,7 +4,7 @@ documentclass: article
 classoption:
   - letterpaper
   - 11pt
-  - landscape
+  # - landscape
 
 geometry:
   - left=0.5in
@@ -98,6 +98,7 @@ header-includes:
   - \definecolor{BoxBackground}{RGB}{247,243,235}
   - \definecolor{BoxBorder}{RGB}{150,138,120}
   - \definecolor{TableBorder}{RGB}{170,158,140}
+  - \definecolor{Fg3}{RGB}{145,145,142}
   
   # Colores Semánticos (Contraste optimizado +20%)
   - \definecolor{HeadingPrimary}{RGB}{45,108,112}
@@ -113,8 +114,8 @@ header-includes:
   - \definecolor{CitationPurple}{RGB}{130,70,108}
   
   # Colores de Código (Contraste mejorado)
-  - \definecolor{CodeBackground}{RGB}{251,248,242}
-  - \definecolor{CodeBorder}{RGB}{210,200,185}
+  - \definecolor{CodeBackground}{RGB}{243,237,228}
+  - \definecolor{CodeBorder}{RGB}{236,229,218}
   - \definecolor{CodeKeyword}{RGB}{42,105,110}
   - \definecolor{CodeString}{RGB}{110,118,18}
   - \definecolor{CodeComment}{RGB}{110,100,90}
@@ -151,20 +152,18 @@ header-includes:
   # ========================================
   # TABLAS OPTIMIZADAS
   # ========================================
-  - \setlength{\arrayrulewidth}{0.5pt}
-  - \renewcommand{\arraystretch}{1.3}
+  - \setlength{\arrayrulewidth}{0.4pt}
+  - \renewcommand{\arraystretch}{1.35}
   - \setlength{\extrarowheight}{2pt}
-  - \setlength{\LTpre}{0.3em}
-  - \setlength{\LTpost}{0.3em}
+  - \setlength{\LTpre}{0.5em}
+  - \setlength{\LTpost}{0.5em}
+  - \setlength{\tabcolsep}{10pt}
   - \setlength{\LTleft}{0pt}
   - \setlength{\LTright}{0pt}
-  - \setlength{\tabcolsep}{10pt}
   - \heavyrulewidth=0.1em
   - \lightrulewidth=0.06em
   - \cmidrulewidth=0.04em
-  - \arrayrulecolor{GruvboxGray}
-  - \renewcommand{\aboverulesep}{0pt}
-  - \renewcommand{\belowrulesep}{0pt}
+  - \arrayrulecolor{Fg3}
 
   # Override longtable
   - |
@@ -188,9 +187,6 @@ header-includes:
 
   # Headers optimizados
   - |
-    \renewcommand\theadfont{\bfseries\sffamily\small\color{HeadingPrimary}}
-    \renewcommand\theadalign{lc}
-    \setcellgapes{4pt}
 
   # ========================================
   # BLOQUES DE CÓDIGO
@@ -198,7 +194,7 @@ header-includes:
   - |
     \lstset{%
       backgroundcolor=\color{CodeBackground},%
-      basicstyle=\ttfamily\fontsize{8.5pt}{10pt}\selectfont\color{TextPrimary},%
+      basicstyle=\ttfamily\fontsize{9pt}{10pt}\selectfont\color{TextPrimary},%
       keywordstyle=\color{CodeKeyword}\bfseries,%
       commentstyle=\color{CodeComment}\itshape,%
       stringstyle=\color{CodeString},%
@@ -215,19 +211,20 @@ header-includes:
       tabsize=2,%
       showspaces=false,%
       showstringspaces=false,%
-      showtabs=false,%
+      showtabs=true,%
       numbers=left,%
-      numbersep=6pt,%
-      xleftmargin=1.5em,%
-      framexleftmargin=1em,%
+      numbersep=12pt,%
+      xleftmargin=3.5em,%
+      framexleftmargin=2.8em,%
       aboveskip=0.8em,%
       belowskip=0.6em,%
       keepspaces=true,%
       columns=fullflexible,%
-      linewidth=\dimexpr\linewidth-3.5em\relax,%
+      linewidth=\dimexpr\linewidth-1em\relax,%
       captionpos=b,%
       escapeinside={(*@}{@*)}%
     }
+    
 
   - |
     \DefineVerbatimEnvironment{Highlighting}{Verbatim}{%
